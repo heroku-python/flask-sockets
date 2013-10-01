@@ -1,16 +1,17 @@
-Flask-WebSocket
-===============
+Flask-Sockets
+=============
 
 WebSockets in Python are really difficult. Now they're not.
 
 .. code-block:: python
 
     from flask import Flask
-    from flask_websockets import WebSocket
+    from flask_sockets import Sockets
 
     app = Flask(__name__)
+    sockets = Sockets(app)
 
-    @websocket.route('/echo')
+    @sockets.route('/echo')
     def echo_socket(ws):
         while True:
             message = ws.receive()

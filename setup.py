@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 """
-Flask-WebSocket
+Flask-Sockets
 -------------
 
-Elegant WebSockets for your Flask app
+Elegant WebSockets for your Flask app.
 """
 from setuptools import setup
 
@@ -12,13 +12,13 @@ from setuptools import setup
 setup(
     name='Flask-WebSocket',
     version='0.1',
-    url='https://github.com/kennethreitz/flask-websocket',
+    url='https://github.com/kennethreitz/flask-sockets',
     license='See License',
     author='Kenneth Reitz',
     author_email='_@kennethreitz.com',
     description='Elegant WebSockets for your Flask app.',
     long_description=__doc__,
-    py_modules=['flask_websocket'],
+    py_modules=['flask_sockets'],
     zip_safe=False,
     include_package_data=True,
     platforms='any',
