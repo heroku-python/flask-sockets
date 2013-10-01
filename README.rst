@@ -3,6 +3,8 @@ Flask-Sockets
 
 Elegant WebSockets for your Flask apps.
 
+.. image:: http://farm4.staticflickr.com/3689/9755961864_577e32a106_c.jpg
+
 .. code-block:: python
 
     from flask import Flask
@@ -22,8 +24,6 @@ Elegant WebSockets for your Flask apps.
         return 'Hello World!'
 
 Serving WebSockets in Python was really difficult. Now it's not.
-
-.. image:: http://farm4.staticflickr.com/3689/9755961864_577e32a106_c.jpg
 
 
 Deployment
