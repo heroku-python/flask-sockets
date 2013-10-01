@@ -54,6 +54,6 @@ WebSocket Interface
 The websocket interface that is passed into your routes is
 `provided by gevent-websocket <https://bitbucket.org/Jeffrey/gevent-websocket/src/6da9851586843a655851b1b196c0d90599de091d/geventwebsocket/websocket.py?at=v0.3.6>`_.
 The basic methods are fairly straitforward — 
-``send``, ``receive``, ``send_fname``, and ``close``.
+``send``, ``receive``, ``send_frame``, and ``close``.
 
 Hopefully, more documentation will be available soon.
