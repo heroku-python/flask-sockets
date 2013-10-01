@@ -4,8 +4,6 @@ Flask-Sockets
 Elegant WebSockets for your Flask apps.
 
 
-Serving WebSockets in Python were really difficult.
-
 .. code-block:: python
 
     from flask import Flask
@@ -24,4 +22,4 @@ Serving WebSockets in Python were really difficult.
     def hello():
         return 'Hello World!'
 
-Now they're not.
+Serving WebSockets in Python were really difficult. Now they're not.
