@@ -3,8 +3,6 @@ Flask-Sockets
 
 Elegant WebSockets for your Flask apps.
 
-.. image:: http://farm4.staticflickr.com/3689/9755961864_577e32a106_c.jpg
-
 .. code-block:: python
 
     from flask import Flask
@@ -47,5 +45,7 @@ The websocket interface that is passed into your routes is
 `provided by gevent-websocket <https://bitbucket.org/Jeffrey/gevent-websocket/src/6da9851586843a655851b1b196c0d90599de091d/geventwebsocket/websocket.py?at=v0.3.6>`_.
 The basic methods are fairly straitforward — 
 ``send``, ``receive``, ``send_fname``, and ``close``.
+
+.. image:: http://farm4.staticflickr.com/3689/9755961864_577e32a106_c.jpg
 
 Hopefully, more documentation will be available soon.
