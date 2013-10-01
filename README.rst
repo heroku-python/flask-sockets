@@ -3,6 +3,7 @@ Flask-Sockets
 
 Elegant WebSockets for your Flask apps.
 
+.. image:: http://farm4.staticflickr.com/3689/9755961864_577e32a106_c.jpg
 
 .. code-block:: python
 
