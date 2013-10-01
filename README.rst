@@ -3,8 +3,6 @@ Flask-Sockets
 
 Elegant WebSockets for your Flask apps.
 
-The Problem
------------
 
 Serving WebSockets in Python were really difficult.
 
