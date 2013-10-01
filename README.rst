@@ -23,3 +23,17 @@ Elegant WebSockets for your Flask apps.
         return 'Hello World!'
 
 Serving WebSockets in Python were really difficult. Now they're not.
+
+
+Deployment
+----------
+
+A custom Gunicorn worker is included to make deployment as friendly as possible::
+
+    $ gunicorn -k flask_sockets.worker hello:app
+
+Production services are provided by `gevent <http://www.gevent.org>`_
+and `gevent-websocket <http://www.gelens.org/code/gevent-websocket/>`_.
+
+Anything that inserts ``wsgi.websocket`` into the WSGI environ is
+supported, but gevent-websocket is recommended.
