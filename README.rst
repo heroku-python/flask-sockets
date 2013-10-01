@@ -26,6 +26,14 @@ Elegant WebSockets for your Flask apps.
 Serving WebSockets in Python was really difficult. Now it's not.
 
 
+Installation
+------------
+
+To install Flask-Sockets, simply::
+
+    $ pip install Flask-Sockets
+    
+    
 Deployment
 ----------
 
