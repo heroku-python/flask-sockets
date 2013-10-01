@@ -3,7 +3,7 @@ Flask-WebSocket
 
 WebSockets in Python are really hard.
 
-::
+.. code-block:: python
 
     from flask import Flask
     from flask_websockets import WebSocket
@@ -16,7 +16,7 @@ WebSockets in Python are really hard.
             message = ws.receive()
             ws.send(message)
 
-    @app.route('/'')
+    @app.route('/')
     def hello():
         return 'Hello World!'
 
