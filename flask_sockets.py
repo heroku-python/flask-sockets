@@ -12,7 +12,7 @@ except ImportError:
 def log_request(self):
     log = self.server.log
     if log:
-        write = log.info if hasattr(log, "info") else log.write
+        write = log.info if hasattr(log, 'info') else log.write
         write(self.format_request() + '\n')
 
 
@@ -23,11 +23,11 @@ class SocketMiddleware(object):
         self.app = wsgi_app
 
     def __call__(self, environ, start_response):
-        path = environ["PATH_INFO"]
+        path = environ['PATH_INFO']
 
         if path in self.ws.url_map:
             handler = self.ws.url_map[path]
-            environment = environ["wsgi.websocket"]
+            environment = environ['wsgi.websocket']
 
             handler(environment)
         else:
