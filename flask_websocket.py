@@ -1,16 +1,15 @@
+# -*- coding: utf-8 -*-
+
 import gevent
 from flask import request
 from websocket import handle_websocket
 
-from geventwebsocket.gunicorn.workers import GeventWebSocketWorker as Worker
 
 def log_request(self):
     log = self.server.log
     if log:
-        if hasattr(log, "info"):
-            log.info(self.format_request() + '\n')
-        else:
-            log.write(self.format_request() + '\n')
+        write = log.info if hasattr(log, "info") else log.write
+        write(self.format_request() + '\n')
 
 
 class SocketMiddleware(object):
