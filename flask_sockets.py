@@ -1,19 +1,26 @@
 # -*- coding: utf-8 -*-
 
+def log_request(self):
+    log = self.server.log
+    if log:
+        if hasattr(log, 'info'):
+            log.info(self.format_request() + '\n')
+        else:
+            log.write(self.format_request() + '\n')
+
+
+# Monkeys are made for freedom.
 try:
     import gevent
     from geventwebsocket.gunicorn.workers import GeventWebSocketWorker as Worker
 except ImportError:
-    # Don't fail, in case someone is using somethign else that provides
-    # "wsgi.websocket".
     pass
 
+if 'gevent' in locals():
+    # Freedom-Patch logger for Gunicorn.
+    if hasattr(gevent, 'pywsgi'):
+        gevent.pywsgi.WSGIHandler.log_request = log_request
 
-def log_request(self):
-    log = self.server.log
-    if log:
-        write = log.info if hasattr(log, 'info') else log.write
-        write(self.format_request() + '\n')
 
 
 class SocketMiddleware(object):
@@ -36,18 +43,12 @@ class SocketMiddleware(object):
 
 class Sockets(object):
 
-    def __init__(self, app=None, patch=True):
+    def __init__(self, app=None):
         self.url_map = {}
         if app:
-            self.init_app(app, patch=patch)
+            self.init_app(app)
 
-    def init_app(self, app, patch=True):
-        if patch:
-            # Monkey-patch log_request handler for Gevent/Gunicorn compatability.
-            if 'gevent' in locals():
-                if hasattr(gevent, 'pywsgi'):
-                    gevent.pywsgi.WSGIHandler.log_request = log_request
-
+    def init_app(self, app):
         app.wsgi_app = SocketMiddleware(app.wsgi_app, self)
 
     def route(self, rule, **options):
