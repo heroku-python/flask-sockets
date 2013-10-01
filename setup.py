@@ -4,19 +4,19 @@
 Flask-Sockets
 -------------
 
-Elegant WebSockets for your Flask app.
+Elegant WebSockets for your Flask apps.
 """
 from setuptools import setup
 
 
 setup(
-    name='Flask-WebSocket',
+    name='Flask-Sockets',
     version='0.1',
     url='https://github.com/kennethreitz/flask-sockets',
     license='See License',
     author='Kenneth Reitz',
     author_email='_@kennethreitz.com',
-    description='Elegant WebSockets for your Flask app.',
+    description='Elegant WebSockets for your Flask apps.',
     long_description=__doc__,
     py_modules=['flask_sockets'],
     zip_safe=False,
@@ -24,7 +24,8 @@ setup(
     platforms='any',
     install_requires=[
         'Flask',
-        'gevent'
+        'gevent',
+        'gevent-websocket'
     ],
     classifiers=[
         'Environment :: Web Environment',
