@@ -30,7 +30,7 @@ class SocketMiddleware(object):
             return self.app(environ, start_response)
 
 
-class WebSocket(object):
+class Sockets(object):
 
     def __init__(self, app=None, patch=True):
         self.url_map = {}
