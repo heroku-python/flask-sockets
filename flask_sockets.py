@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import gevent
-from flask import request
-from websocket import handle_websocket
+try:
+    import gevent
+    from geventwebsocket.gunicorn.workers import GeventWebSocketWorker as Worker
+except ImportError:
+    # Don't fail, in case someone is using somethign else that provides
+    # "wsgi.websocket".
+    pass
 
 
 def log_request(self):
@@ -40,8 +44,9 @@ class Sockets(object):
     def init_app(self, app, patch=True):
         if patch:
             # Monkey-patch log_request handler for Gevent/Gunicorn compatability.
-            if hasattr(gevent, 'pywsgi'):
-                gevent.pywsgi.WSGIHandler.log_request = log_request
+            if 'gevent' in locals():
+                if hasattr(gevent, 'pywsgi'):
+                    gevent.pywsgi.WSGIHandler.log_request = log_request
 
         app.wsgi_app = SocketMiddleware(app.wsgi_app, self)
 
@@ -55,3 +60,7 @@ class Sockets(object):
 
     def add_url_rule(self, rule, _, f, **options):
         self.url_map[rule] = f
+
+# CLI sugar.
+if 'Worker' in locals():
+    worker = Worker
