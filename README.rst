@@ -1,7 +1,12 @@
 Flask-Sockets
 =============
 
-WebSockets in Python are really difficult. Now they're not.
+Elegant WebSockets for your Flask apps.
+
+The Problem
+-----------
+
+Serving WebSockets in Python were really difficult.
 
 .. code-block:: python
 
@@ -21,3 +26,4 @@ WebSockets in Python are really difficult. Now they're not.
     def hello():
         return 'Hello World!'
 
+Now they're not.
