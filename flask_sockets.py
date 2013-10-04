@@ -1,26 +1,33 @@
 # -*- coding: utf-8 -*-
 
+
 def log_request(self):
     log = self.server.log
-    if log:
-        if hasattr(log, 'info'):
-            log.info(self.format_request() + '\n')
-        else:
-            log.write(self.format_request() + '\n')
+    if not log:
+        return
+
+    if hasattr(log, 'info'):
+        log.info(self.format_request() + '\n')
+    else:
+        log.write(self.format_request() + '\n')
 
 
 # Monkeys are made for freedom.
 try:
     import gevent
-    from geventwebsocket.gunicorn.workers import GeventWebSocketWorker as Worker
 except ImportError:
     pass
-
-if 'gevent' in locals():
+else:
     # Freedom-Patch logger for Gunicorn.
     if hasattr(gevent, 'pywsgi'):
         gevent.pywsgi.WSGIHandler.log_request = log_request
 
+try:
+    from geventwebsocket.gunicorn.workers import GeventWebSocketWorker
+except ImportError:
+    pass
+else:
+    worker = Worker = GeventWebSocketWorker  # CLI sugar
 
 
 class SocketMiddleware(object):
@@ -61,7 +68,3 @@ class Sockets(object):
 
     def add_url_rule(self, rule, _, f, **options):
         self.url_map[rule] = f
-
-# CLI sugar.
-if 'Worker' in locals():
-    worker = Worker
