@@ -8,18 +8,17 @@ Elegant WebSockets for your Flask apps.
 .. code-block:: python
 
     from flask import Flask
-    from flask_sockets import Sockets
+    from flask_sockets import Sockets, socket, ws
 
     app = Flask(__name__)
-    sockets = Sockets(app)
+    Sockets(app)
 
     @app.route('/echo')
+    @socket
     def echo_socket():
-        if ws:
-            while True:
-                message = ws.receive()
-                ws.send(message)
-            return ''
+        while True:
+            message = ws.receive()
+            ws.send(message)
 
     @app.route('/')
     def hello():
