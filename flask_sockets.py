@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from werkzeug.routing import Map, Rule
+
 def log_request(self):
     log = self.server.log
     if log:
@@ -30,13 +32,14 @@ class SocketMiddleware(object):
         self.app = wsgi_app
 
     def __call__(self, environ, start_response):
-        path = environ['PATH_INFO']
+        adapter = self.ws.url_map.bind_to_environ(environ)
 
-        if path in self.ws.url_map:
-            handler = self.ws.url_map[path]
-            environment = environ['wsgi.websocket']
+        # if the rule matches, intercept, otherwise forward to app
+        if adapter.test():
+            endpoint, values = adapter.match()
+            handler = self.ws.handlers[endpoint]
 
-            handler(environment)
+            handler(environ['wsgi.websocket'], **values)
         else:
             return self.app(environ, start_response)
 
@@ -44,7 +47,9 @@ class SocketMiddleware(object):
 class Sockets(object):
 
     def __init__(self, app=None):
-        self.url_map = {}
+        self.url_map = Map()
+        self.handlers = {}
+
         if app:
             self.init_app(app)
 
@@ -52,15 +57,23 @@ class Sockets(object):
         app.wsgi_app = SocketMiddleware(app.wsgi_app, self)
 
     def route(self, rule, **options):
-
         def decorator(f):
             endpoint = options.pop('endpoint', None)
             self.add_url_rule(rule, endpoint, f, **options)
             return f
         return decorator
 
-    def add_url_rule(self, rule, _, f, **options):
-        self.url_map[rule] = f
+    def add_url_rule(self, rule, endpoint=None, view_func=None, **options):
+        if endpoint is None:
+            endpoint = view_func.__name__
+        options['endpoint'] = endpoint
+
+        rule = Rule(rule, **options)
+        self.url_map.add(rule)
+
+        if view_func is not None:
+            self.handlers[endpoint] = view_func
+
 
 # CLI sugar.
 if 'Worker' in locals():
