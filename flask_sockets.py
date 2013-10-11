@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from functools import wraps
 from flask import request
 from werkzeug import LocalProxy
 
@@ -27,6 +28,19 @@ if 'gevent' in locals():
 
 
 ws = LocalProxy(lambda: request.environ.get('wsgi.websocket', None))
+
+
+def socket(f):
+    @wraps(f)
+    def _(*args, **kwargs):
+        if ws is None:
+            raise RuntimeError('Websocket support not installed')
+        rv = f(*args, **kwargs)
+        if rv is None:
+            return ''  # avoid empty replies and flask exceptions caused by it
+        return rv
+
+    return _
 
 
 class Sockets(object):
