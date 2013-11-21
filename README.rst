@@ -44,8 +44,24 @@ A custom Gunicorn worker is included to make deployment as friendly as possible:
 Production services are provided by `gevent <http://www.gevent.org>`_
 and `gevent-websocket <http://www.gelens.org/code/gevent-websocket/>`_.
 
+
 Anything that inserts ``wsgi.websocket`` into the WSGI environ is
 supported, but gevent-websocket is recommended.
+
+
+Development / Testing
+---------------------
+
+Because the Werkzeug development server cannot provide the WSGI environ with 
+a websocket interface, it is not possible to run a Flask app using the standard 
+``app.run()``.  
+
+If you try to, Flask will still try to serve on all the specified routes, and 
+throw a ``KeyError`` whenever a client tries to connect to a websocket route.  
+
+Instead, just use the included gunicorn worker (explained above), or anything that
+can insert ``wsgi.websocket`` into the WSGI environ.
+
 
 
 WebSocket Interface
