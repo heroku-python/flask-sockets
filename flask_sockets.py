@@ -31,14 +31,13 @@ class SocketMiddleware(object):
 
     def __call__(self, environ, start_response):
         path = environ['PATH_INFO']
-
-        if path in self.ws.url_map:
+        try:
             handler = self.ws.url_map[path]
-            environment = environ['wsgi.websocket']
-
-            handler(environment)
-        else:
+        except KeyError: #Path not in URL map. Alert user of problem or log the error?
             return self.app(environ, start_response)
+        else:
+            environment = environ['wsgi.websocket']
+            handler(environment)
 
 
 class Sockets(object):
