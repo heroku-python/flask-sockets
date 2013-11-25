@@ -24,6 +24,7 @@ setup(
     platforms='any',
     install_requires=[
         'Flask',
+        'werkzeug',
         'gevent',
         'gevent-websocket'
     ],
