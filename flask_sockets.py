@@ -34,8 +34,9 @@ class SocketMiddleware(object):
 
         if path in self.ws.url_map:
             handler = self.ws.url_map[path]
-            environment = environ['wsgi.websocket']
+            environment = environ.get('wsgi.websocket')
 
+        if environment:
             handler(environment)
         else:
             return self.app(environ, start_response)
