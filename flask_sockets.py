@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from functools import wraps
+
+from flask import request
+
+
 def log_request(self):
     log = self.server.log
     if log:
@@ -21,46 +26,25 @@ if 'gevent' in locals():
     if hasattr(gevent, 'pywsgi'):
         gevent.pywsgi.WSGIHandler.log_request = log_request
 
-
-
-class SocketMiddleware(object):
-
-    def __init__(self, wsgi_app, socket):
-        self.ws = socket
-        self.app = wsgi_app
-
-    def __call__(self, environ, start_response):
-        path = environ['PATH_INFO']
-
-        if path in self.ws.url_map:
-            handler = self.ws.url_map[path]
-            environment = environ['wsgi.websocket']
-
-            handler(environment)
-        else:
-            return self.app(environ, start_response)
-
-
 class Sockets(object):
 
     def __init__(self, app=None):
-        self.url_map = {}
-        if app:
-            self.init_app(app)
-
-    def init_app(self, app):
-        app.wsgi_app = SocketMiddleware(app.wsgi_app, self)
+        self.app = app
 
     def route(self, rule, **options):
 
         def decorator(f):
-            endpoint = options.pop('endpoint', None)
-            self.add_url_rule(rule, endpoint, f, **options)
-            return f
+            @wraps(f)
+            def inner(*args, **kwargs):
+                return f(request.environ['wsgi.websocket'], *args, **kwargs)
+
+            if self.app:
+                endpoint = options.pop('endpoint', None)
+                self.app.add_url_rule(rule, endpoint, inner, **options)
+            return inner
+
         return decorator
 
-    def add_url_rule(self, rule, _, f, **options):
-        self.url_map[rule] = f
 
 # CLI sugar.
 if 'Worker' in locals():
