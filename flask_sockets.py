@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from werkzeug.routing import Map, Rule
+from werkzeug.exceptions import NotFound
 
 def log_request(self):
     log = self.server.log
@@ -30,22 +32,20 @@ class SocketMiddleware(object):
         self.app = wsgi_app
 
     def __call__(self, environ, start_response):
-        path = environ['PATH_INFO']
-
-        if path in self.ws.url_map:
-            handler = self.ws.url_map[path]
+        adapter = self.ws.url_map.bind_to_environ(environ)
+        try:
+            handler, values = adapter.match()
             environment = environ['wsgi.websocket']
-
-            handler(environment)
+            handler(environment, **values)
             return []
-        else:
+        except NotFound:
             return self.app(environ, start_response)
 
 
 class Sockets(object):
 
     def __init__(self, app=None):
-        self.url_map = {}
+        self.url_map = Map()
         if app:
             self.init_app(app)
 
@@ -61,7 +61,7 @@ class Sockets(object):
         return decorator
 
     def add_url_rule(self, rule, _, f, **options):
-        self.url_map[rule] = f
+        self.url_map.add(Rule(rule, endpoint=f))
 
 # CLI sugar.
 if 'Worker' in locals():
