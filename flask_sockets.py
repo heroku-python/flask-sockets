@@ -37,6 +37,7 @@ class SocketMiddleware(object):
             environment = environ['wsgi.websocket']
 
             handler(environment)
+            return []
         else:
             return self.app(environ, start_response)
 
