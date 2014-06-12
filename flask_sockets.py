@@ -32,10 +32,13 @@ class SocketMiddleware(object):
     def __call__(self, environ, start_response):
         path = environ['PATH_INFO']
 
+        environment = None
+
         if path in self.ws.url_map:
             handler = self.ws.url_map[path]
-            environment = environ['wsgi.websocket']
+            environment = environ.get('wsgi.websocket')
 
+        if environment:
             handler(environment)
             return []
         else:
