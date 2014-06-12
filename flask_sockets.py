@@ -31,11 +31,10 @@ class SocketMiddleware(object):
 
     def __call__(self, environ, start_response):
         path = environ['PATH_INFO']
+        environment = environ.get('wsgi.websocket', None)
 
-        if path in self.ws.url_map:
+        if path in self.ws.url_map and environment:
             handler = self.ws.url_map[path]
-            environment = environ['wsgi.websocket']
-
             handler(environment)
             return []
         else:
