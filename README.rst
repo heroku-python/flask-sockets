@@ -22,6 +22,14 @@ Elegant WebSockets for your Flask apps.
     @app.route('/')
     def hello():
         return 'Hello World!'
+    
+    
+    if __name__ == "__main__":
+        from gevent import pywsgi
+        from geventwebsocket.handler import WebSocketHandler
+        server = pywsgi.WSGIServer(('', 5000), app, handler_class=WebSocketHandler)
+        server.serve_forever()
+
 
 Serving WebSockets in Python was really difficult. Now it's not.
 
@@ -44,6 +52,7 @@ A custom Gunicorn worker is included to make deployment as friendly as possible:
 Production services are provided by `gevent <http://www.gevent.org>`_
 and `gevent-websocket <http://www.gelens.org/code/gevent-websocket/>`_.
 
+The given example can run standalone as main.
 
 Anything that inserts ``wsgi.websocket`` into the WSGI environ is
 supported, but gevent-websocket is recommended.
