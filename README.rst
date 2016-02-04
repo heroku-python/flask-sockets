@@ -22,8 +22,8 @@ Elegant WebSockets for your Flask apps.
     @app.route('/')
     def hello():
         return 'Hello World!'
-    
-    
+
+
     if __name__ == "__main__":
         from gevent import pywsgi
         from geventwebsocket.handler import WebSocketHandler
@@ -40,8 +40,8 @@ Installation
 To install Flask-Sockets, simply::
 
     $ pip install Flask-Sockets
-    
-    
+
+
 Deployment
 ----------
 
@@ -61,12 +61,12 @@ supported, but gevent-websocket is recommended.
 Development / Testing
 ---------------------
 
-Because the Werkzeug development server cannot provide the WSGI environ with 
-a websocket interface, it is not possible to run a Flask app using the standard 
-``app.run()``.  
+Because the Werkzeug development server cannot provide the WSGI environ with
+a websocket interface, it is not possible to run a Flask app using the standard
+``app.run()``.
 
-If you try to, Flask will still try to serve on all the specified routes, and 
-throw a ``KeyError`` whenever a client tries to connect to a websocket route.  
+If you try to, Flask will still try to serve on all the specified routes, and
+throw a ``KeyError`` whenever a client tries to connect to a websocket route.
 
 Instead, just use the included gunicorn worker (explained above), or anything that
 can insert ``wsgi.websocket`` into the WSGI environ.
@@ -80,3 +80,23 @@ The websocket interface that is passed into your routes is
 `provided by gevent-websocket <https://bitbucket.org/noppo/gevent-websocket>`_.
 The basic methods are fairly straitforward — 
 ``send``, ``receive``, ``send_frame``, and ``close``.
+
+
+Release History
+---------------
+
+v0.2.0
+~~~~~~
+
+- Add request context into the socket handler.
+- Fallback to Flask logic if websocket environment is not available.
+- Use Flask routing to allow for variables in URL
+
+v0.1.0
+~~~~~~
+
+- Initial release.
+
+
+
+
