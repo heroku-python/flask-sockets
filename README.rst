@@ -15,7 +15,7 @@ Elegant WebSockets for your Flask apps.
 
     @sockets.route('/echo')
     def echo_socket(ws):
-        while True:
+        while not ws.closed:
             message = ws.receive()
             ws.send(message)
 
