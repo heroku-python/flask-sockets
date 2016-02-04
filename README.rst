@@ -50,7 +50,7 @@ A custom Gunicorn worker is included to make deployment as friendly as possible:
     $ gunicorn -k flask_sockets.worker hello:app
 
 Production services are provided by `gevent <http://www.gevent.org>`_
-and `gevent-websocket <http://www.gelens.org/code/gevent-websocket/>`_.
+and `gevent-websocket <https://bitbucket.org/Jeffrey/gevent-websocket>`_.
 
 The given example can run standalone as main.
 
