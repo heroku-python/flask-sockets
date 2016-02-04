@@ -78,7 +78,7 @@ WebSocket Interface
 
 The websocket interface that is passed into your routes is
 `provided by gevent-websocket <https://bitbucket.org/noppo/gevent-websocket>`_.
-The basic methods are fairly straitforward — 
+The basic methods are fairly straightforward — 
 ``send``, ``receive``, ``send_frame``, and ``close``.
 
 
