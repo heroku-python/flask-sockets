@@ -39,7 +39,9 @@ class SocketMiddleware(object):
         try:
             handler, values = adapter.match()
             environment = environ['wsgi.websocket']
-            cookie = parse_cookie(environ['HTTP_COOKIE'])
+            cookie = None
+            if 'HTTP_COOKIE' in environ:
+                cookie = parse_cookie(environ['HTTP_COOKIE'])
 
             with self.app.app_context():
                 with self.app.request_context(environ):
