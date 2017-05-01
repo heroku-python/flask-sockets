@@ -4,27 +4,15 @@ from werkzeug.routing import Map, Rule
 from werkzeug.exceptions import NotFound
 
 
-def log_request(self):
-    log = self.server.log
-    if log:
-        if hasattr(log, 'info'):
-            log.info(self.format_request() + '\n')
-        else:
-            log.write(self.format_request() + '\n')
-
-
 # Monkeys are made for freedom.
 try:
-    import gevent
     from geventwebsocket.gunicorn.workers import GeventWebSocketWorker as Worker
+    from geventwebsocket.handler import WebSocketHandler
+    from gunicorn.workers.ggevent import PyWSGIHandler
+
+    import gevent
 except ImportError:
     pass
-
-
-if 'gevent' in locals():
-    # Freedom-Patch logger for Gunicorn.
-    if hasattr(gevent, 'pywsgi'):
-        gevent.pywsgi.WSGIHandler.log_request = log_request
 
 
 class SocketMiddleware(object):
@@ -105,5 +93,13 @@ class Sockets(object):
 
 
 # CLI sugar.
-if 'Worker' in locals():
+if ('Worker' in locals() and 'PyWSGIHandler' in locals() and
+        'gevent' in locals()):
+
+    class GunicornWebSocketHandler(PyWSGIHandler, WebSocketHandler):
+        def log_request(self):
+            if '101' not in self.status:
+                super(GunicornWebSocketHandler, self).log_request()
+
+    Worker.wsgi_handler = GunicornWebSocketHandler
     worker = Worker
