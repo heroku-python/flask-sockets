@@ -2,6 +2,8 @@
 
 from werkzeug.routing import Map, Rule
 from werkzeug.exceptions import NotFound
+from werkzeug.http import parse_cookie
+from flask import request
 
 
 # Monkeys are made for freedom.
@@ -27,9 +29,15 @@ class SocketMiddleware(object):
         try:
             handler, values = adapter.match()
             environment = environ['wsgi.websocket']
+            cookie = None
+            if 'HTTP_COOKIE' in environ:
+                cookie = parse_cookie(environ['HTTP_COOKIE'])
 
             with self.app.app_context():
                 with self.app.request_context(environ):
+                    # add cookie to the request to have correct session handling
+                    request.cookie = cookie
+
                     handler(environment, **values)
                     return []
         except (NotFound, KeyError):
