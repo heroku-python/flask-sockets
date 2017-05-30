@@ -73,6 +73,8 @@ Usage of `Flask blueprints`_:
         server = pywsgi.WSGIServer(('', 5000), app, handler_class=WebSocketHandler)
         server.serve_forever()
 
+Combining WebSockets with Ajax (XHR) endpoints also comes handy with the support of session handling built-in to sockets as well. As an example you could use an Ajax login call which would create a new session and accordingly set a secure HttpOnly cookie to the browser. After authorization, you can connect to the WebSocket endpoint and reuse the session handling from Flask there as well (as shown here: https://pythonhosted.org/Flask-Session/). Access to other custom cookies is also possible via Flasks ``request.cookies`` property.
+
 
 Serving WebSockets in Python was really difficult. Now it's not.
 
