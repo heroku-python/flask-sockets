@@ -95,7 +95,7 @@ A custom Gunicorn worker is included to make deployment as friendly as possible:
     $ gunicorn -k flask_sockets.worker hello:app
 
 Production services are provided by `gevent <http://www.gevent.org>`_
-and `gevent-websocket <https://bitbucket.org/noppo/gevent-websocket>`_.
+and `gevent-websocket <https://gitlab.com/noppo/gevent-websocket>`_.
 
 The given example can run standalone as main.
 
@@ -122,7 +122,7 @@ WebSocket Interface
 -------------------
 
 The websocket interface that is passed into your routes is
-`provided by gevent-websocket <https://bitbucket.org/noppo/gevent-websocket>`_.
+`provided by gevent-websocket <https://gitlab.com/noppo/gevent-websocket>`_.
 The basic methods are fairly straightforward — 
 ``send``, ``receive``, ``send_frame``, and ``close``.
 
