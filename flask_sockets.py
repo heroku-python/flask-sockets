@@ -38,6 +38,12 @@ class SocketMiddleware(object):
                     # add cookie to the request to have correct session handling
                     request.cookie = cookie
 
+                    # allow for some additional setup for the websocket
+                    # connection.
+                    preprocess_retval = self.ws.preprocess_handshake()
+                    if preprocess_retval is not None:
+                        return preprocess_retval
+
                     handler(environment, **values)
                     return []
         except (NotFound, KeyError):
@@ -59,6 +65,12 @@ class Sockets(object):
         #: you how often they got attached.
         self.blueprints = {}
         self._blueprint_order = []
+
+        #: A dictionary with lists of functions that will be called at the
+        #: beginning of each handshake. The key of the dictionary is  ``None``
+        #: for all handshakes. To register a function, use the
+        #: :meth:`before_handshake` decorator.
+        self.before_handshake_funcs = {}
 
         if app:
             self.init_app(app)
@@ -98,6 +110,25 @@ class Sockets(object):
             first_registration = True
 
         blueprint.register(self, options, first_registration)
+
+    def before_handshake(self, f):
+        """
+        Do additional setup before accepting the handshake.
+
+        Similar to :meth:`~flask.app.before_request`.
+        """
+        self.before_handshake_funcs.setdefault(None, []).append(f)
+        return f
+
+    def preprocess_handshake(self):
+        """
+        Called before the handshake request is dispacthed.
+        """
+        funcs = self.before_handshake_funcs.get(None, [])
+        for func in funcs:
+            rv = func()
+            if rv is not None:
+                return rv
 
 
 # CLI sugar.
