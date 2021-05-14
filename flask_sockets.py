@@ -75,7 +75,7 @@ class Sockets(object):
         return decorator
 
     def add_url_rule(self, rule, _, f, **options):
-        self.url_map.add(Rule(rule, endpoint=f))
+        self.url_map.add(Rule(rule, endpoint=f, websocket=True))
 
     def register_blueprint(self, blueprint, **options):
         """
